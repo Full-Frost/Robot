@@ -3,11 +3,15 @@
 #include <kipr/botball.h>
 int l_motor = 0;
 int r_motor = 3;
-int speed = 50;
-int r_speed = -50;
+int speed = 100;
+int r_speed = -100;
 int r_evade = -75;
 int l_evade = 25;
 int counter = 0;
+int shortPause = 1500;
+int longPause = 2500;
+int sensUno = 1;
+int sensDos = 2;
 //FUNCTION DEFINITIONS
 void forward(){
 motor(l_motor,speed);
@@ -17,27 +21,27 @@ motor(l_motor,speed);
 void backward(){
     motor(l_motor,r_speed);
     motor(r_motor,r_speed);
-    msleep(1500);
+    msleep(shortPause);
     ao();
    
 }
 void turnR(){
     motor(l_motor,r_speed);
     motor(r_motor,speed);
-    msleep(1500);
+    msleep(shortPause);
     ao();
 }
 
 void turnL(){
   motor(l_motor,speed);
     motor(r_motor,r_speed);
-    msleep(1500);
+    msleep(shortPause);
     ao();
 }
 void evadeR(){
     motor(l_motor,l_evade);
     motor(r_motor,r_evade);
-    msleep(2500);
+    msleep(longPause);
     ao();
 }
 int main()
@@ -45,20 +49,20 @@ int main()
     shut_down_in(300);
     while(1){//as long as the log test is true...
        forward();
-        if (digital(2)==1){
+        if (digital(sensDos)==1){
                backward();
-               turnL();
+               turnR();
                forward();
                counter++;
             }
-        if (digital(1) == 1){
+        if (digital(sensUno) == 1){
             backward();
             turnL();
             forward();
             counter++;
             }
         //stuff will loop
-        if(counter == 5){
+        if(counter == 4){
             evadeR();
             counter = 0;
         }
