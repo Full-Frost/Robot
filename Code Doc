@@ -1,44 +1,44 @@
 //By Colin O'Rourke and Gabriel Ryan
 
 #include <kipr/botball.h>
-int l_motor = 0;
-int r_motor = 3;
-int speed = 100;
-int r_speed = -100;
-int r_evade = -75;
-int l_evade = 25;
-int counter = 0;
-int shortPause = 1500;
-int longPause = 2500;
-int sensUno = 1;
-int sensDos = 2;
+int l_motor = 0; // variable for the input on the wallaby for the motor 
+int r_motor = 3; // variable for the input on the wallaby for the motor
+int speed = 75; // variable for the speed of the robot 
+int r_speed = -75; // variable for the speed for the right motor
+int r_evade = -85; // variable for the speed of the evade function for the right motor 
+int l_evade = 25; // variable for the speed of the evade funtion on the left motor
+int counter = 0; // variable for the counter which counts how many times it comes into contact with an object. 
+int shortPause = 1500; // variable for a shorter msleep
+int longPause = 2500; // variable for a long msleep
+int sensUno = 1; // variable for the input of the sensor on the wallaby
+int sensDos = 2; // variable for the input of the sensor on the wallaby
 //FUNCTION DEFINITIONS
-void forward(){
+void forward(){  // forward function tells the wallaby what the power required in each motor is
 motor(l_motor,speed);
     motor(r_motor,speed);
 }
 
-void backward(){
+void backward(){ // backward function is something the wallaby will do if it comes into contact with an obstacle and just backs the robot up
     motor(l_motor,r_speed);
     motor(r_motor,r_speed);
     msleep(shortPause);
     ao();
    
 }
-void turnR(){
+void turnR(){  // the turnR function turns the robot to the right 
     motor(l_motor,r_speed);
     motor(r_motor,speed);
     msleep(shortPause);
     ao();
 }
 
-void turnL(){
+void turnL(){  // the turnL function turns the robot to the left
   motor(l_motor,speed);
     motor(r_motor,r_speed);
     msleep(shortPause);
     ao();
 }
-void evadeR(){
+void evadeR(){ //the evade funtion makes the robot turn to a much greater degree than any of the other turns 
     motor(l_motor,l_evade);
     motor(r_motor,r_evade);
     msleep(longPause);
@@ -46,25 +46,25 @@ void evadeR(){
 }
 int main()
 {
-    shut_down_in(300);
+    shut_down_in(300); //shuts everything off in 5 minutes 
     while(1){//as long as the log test is true...
-       forward();
-        if (digital(sensDos)==1){
-               backward();
-               turnR();
-               forward();
-               counter++;
+       forward(); //run forward funtion
+        if (digital(sensDos)==1){//if the sensor is clicked run these functions 
+               backward(); //move backwards 
+               turnR(); //turn to the right
+               forward(); //resume moving forward
+               counter++; //add 1 to the counter 
             }
-        if (digital(sensUno) == 1){
-            backward();
-            turnL();
-            forward();
-            counter++;
+        if (digital(sensUno) == 1){ //if the first sensor is clicked 
+            backward(); // move backward 
+            turnL(); // turn to the right 
+            forward(); // resume moving forward 
+            counter++; //add 1 to the counter 
             }
         //stuff will loop
-        if(counter == 4){
-            evadeR();
-            counter = 0;
+        if(counter == 4){ // if the counter is equal to 4 do the following 
+            evadeR(); //run the evade function
+            counter = 0; //reset the counter 
         }
    }
    
