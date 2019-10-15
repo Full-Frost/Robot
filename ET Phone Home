@@ -1,25 +1,28 @@
 //Front:2910 Right:2700 toofar:2910
 
 #include <kipr/botball.h>
-int l_motor = 0; 
-int r_motor = 3; 
-int speed = 50; 
-int r_speed = -40; 
-int veerWallL = 25;
+int l_motor = 0;
+int r_motor = 3;
+int speed = 50;
+int r_speed = -40;
+int veerWallL = 20;
 int veerWallR = 25;
-int counter = 0; 
-int shortPause = 1250; 
-int longPause = 2500; 
-int etFront = 0; 
-int etRight = 3; 
+int counter = 0;
+int shortPause = 1425;
+int longPause = 2500;
+int etFront = 0;
+int etRight = 3;
 int frontStop = 2910;
-int rightStopclose = 2350;
+int rightStopclose = 2300;
 int rightStoplong = 2908;
 int turnLr = -20;
 int turnLl = 50;
-int veerFast = 50; 
+int veerFast = 70;
+int miniTurnL = -20;
+int miniTurnR = 30;
+
 void forward(){  
-	motor(l_motor,speed);
+motor(l_motor,speed);
     motor(r_motor,speed);
     ao();
 }
@@ -49,22 +52,33 @@ void followWall(){
         forward();
         if(analog(etRight)>= rightStoplong){
             veerWall();
-          }   
+          }  
         if (analog(etRight)<= rightStopclose){
             veerAway();
         }
-    }
+   }
+ao();
 }
 
+void turnSolution(){
+    motor (l_motor, miniTurnL);
+    motor(r_motor, miniTurnR);
+    forward();
+}
 
+void forward2(){
+    motor(l_motor,speed);
+    motor(r_motor,speed);
+    msleep(400);
+    ao();
+}
 
 int main()
 {
    followWall();
-    ao();
-    forward();
-    msleep(1400);
+    forward2();
     turnL();
+    turnSolution();
     followWall();
     ao();
     printf("Hello World\n");
