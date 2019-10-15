@@ -1,0 +1,22 @@
+#include <kipr/botball.h>
+int lMotor = 0;
+int rMotor = 3;
+int servoUn = 0;
+int topHat = 3;
+int etFront = 0;
+int speedL = 50;
+int speedR = 50;
+int shortPause = 1400;
+
+void forward(){
+ motor (lMotor, speedL);
+ motor (rMotor, speedR);
+ msleep(shortPause);
+}
+
+int main()
+{
+    forward();
+    printf("Hello World\n");
+    return 0;
+}
