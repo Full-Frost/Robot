@@ -1,53 +1,53 @@
 //Front:2910 Right:2700 toofar:2910
 
 #include <kipr/botball.h>
-int l_motor = 0;
-int r_motor = 3;
-int speed = 50;
-int r_speed = -40;
-int veerWallL = 20;
-int veerWallR = 25;
-int counter = 0;
-int shortPause = 1425;
-int longPause = 2500;
-int etFront = 0;
-int etRight = 3;
-int frontStop = 2910;
-int rightStopclose = 2300;
-int rightStoplong = 2908;
-int turnLr = -20;
-int turnLl = 50;
-int veerFast = 70;
-int miniTurnL = -20;
-int miniTurnR = 30;
+int l_motor = 0; //motor port
+int r_motor = 3; //motor port
+int speed = 50; //speed value
+int r_speed = -40; //speed value 
+int veerWallL = 20; //veer value
+int veerWallR = 25; //veer value 
+int counter = 0; //counter value 
+int shortPause = 1425; //pause value 
+int longPause = 2500; //pause value 
+int etFront = 0; //sensor port
+int etRight = 3; //sensor port
+int frontStop = 2910; //range number
+int rightStopclose = 2300; //range number
+int rightStoplong = 2908; //range number 
+int turnLr = -20; //turn speed
+int turnLl = 50; //turn speed
+int veerFast = 70; //fast veer value 
+int miniTurnL = -20; //turn speed
+int miniTurnR = 30; //turn speed
 
-void forward(){  
+void forward(){  //forward function 
 motor(l_motor,speed);
     motor(r_motor,speed);
     ao();
 }
 
-void turnL(){  
+void turnL(){  turn left function 
   motor(l_motor,turnLl);
     motor(r_motor,turnLr);
     msleep(shortPause);
     ao();
 }
 
-void veerWall(){
+void veerWall(){ //veer towards wall function
     motor (l_motor, veerWallL);
     motor (r_motor, veerFast);
     ao();
 }
 
-void veerAway(){
+void veerAway(){ //veer away from wall function
     motor(l_motor, veerFast);
     motor(r_motor, veerWallL);
     ao();
 }
 
 
-void followWall(){
+void followWall(){ //while loop to follow wall
     while (analog(etFront)< frontStop){
         forward();
         if(analog(etRight)>= rightStoplong){
@@ -60,20 +60,20 @@ void followWall(){
 ao();
 }
 
-void turnSolution(){
+void turnSolution(){ //sencond turn 
     motor (l_motor, miniTurnL);
     motor(r_motor, miniTurnR);
     forward();
 }
 
-void forward2(){
+void forward2(){//move forward for a set amount of time 
     motor(l_motor,speed);
     motor(r_motor,speed);
     msleep(400);
     ao();
 }
 
-int main()
+int main() //run functions 
 {
    followWall();
     forward2();
