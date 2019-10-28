@@ -1,22 +1,98 @@
 #include <kipr/botball.h>
-int lMotor = 0;
-int rMotor = 3;
-int servoUn = 0;
-int topHat = 3;
-int etFront = 0;
-int speedL = 50;
-int speedR = 50;
-int shortPause = 1400;
+int lMotor = 0; //motor port
+int rMotor = 3; //motor port
+int servoUn = 1; //servo port
+int topHat = 3; //tophat sensor port
+int etFront = 0; //sensor port
+int speedL = 50; //speed value
+int speedR = 20; //speed value 
+int turnR = 20; //turn value 
+int turnL = 20;
+int shortPause = 500; //msleep value
+int pause = 1500;
+int pauseActual = 1000;
+int line = 1000; //range number
+int wall = 2900; //range number 
+int wave = 930; //servo position 1
+int wave_dos = 1200; //servo position 2
+int wave_tres = 100; //servo position 3  
+int wave_cuatro = 700; //servo position 4
 
-void forward(){
- motor (lMotor, speedL);
- motor (rMotor, speedR);
- msleep(shortPause);
+void forward(){ //forward function
+  motor (lMotor, speedL);
+  motor (rMotor, speedR);
+    ao();
 }
 
-int main()
+void miniturnL(){ //left turn function
+    motor(lMotor, turnL);
+    motor(rMotor, speedR);  
+    ao();
+}
+
+void miniturnR(){ //right turn function
+  motor(lMotor, speedL);
+    motor(rMotor, turnR);
+    ao();
+}
+
+void waveFlag(){ //servo wave function
+printf("wave");
+    enable_servos();
+    set_servo_position(servoUn, wave);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave_dos);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave_tres);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave_cuatro);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave_dos);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave_tres);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave_cuatro);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave_dos);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave_tres);
+    msleep(shortPause);
+    set_servo_position(servoUn, wave_cuatro);
+    msleep(shortPause);
+    disable_servos();
+}
+
+void forwardWhile(){ //while loop when searching for line
+    while(analog(topHat) <= line){
+        forward();
+        printf("looking for line\n");
+    }
+     ao();
+}
+
+void shimmeyWhile(){ //while lopp when on line 
+     while(analog(etFront) <= wall){
+       
+        if(analog(topHat)>= line){
+            miniturnR();
+            printf("move off line\n");
+          }  
+        if (analog(topHat)<=line){
+           miniturnL();
+            printf("move to line\n");
+        }
+   
+    }
+}
+int main() //run the functions 
 {
-    forward();
-    printf("Hello World\n");
-    return 0;
+   forwardWhile();
+   shimmeyWhile();  
+   waveFlag();
+
+return 0;
 }
