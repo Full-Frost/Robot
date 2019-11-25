@@ -1,0 +1,80 @@
+#include <kipr/botball.h>
+int lMotor = 1;
+int rMotor = 3;
+int speed = 80; 
+int channelOrange = 1;
+int objectOrange = 2;
+int objectT = 2;
+int fallacy = 9;
+int cero = 0;
+int counter = 0;
+int cameraChal = 1;
+int flipperChal = 2;
+int veerM = 20; 
+
+
+void forward(){
+    motor(lMotor, speed);
+    motor(rMotor, speed);
+    ao();
+}
+
+void veerL(){
+    motor(lMotor, veerM);
+    motor(rMotor, speed);
+    ao();
+}
+
+void veerR(){
+    motor(lMotor, speed);
+    motor(rMotor, veerM);
+    ao();
+}
+
+void servoPosOrange(){
+    set_servo_position(cameraChal, get_object_center_x(channelOrange, objectOrange));
+}
+
+void followOrange(){
+  
+    
+    if (get_object_center_x(channelOrange,0)<80){
+        printf("object is on the left");
+        veerL();
+      printf("moving left");
+}
+   
+        if(get_object_center_x(channelOrange,0)>80){
+            printf("object is on the right");
+            veerR();
+            printf("Moving right");
+        }
+    }
+
+void colorTrack(){
+    camera_open_black();
+    printf("on\n");
+   // int counter = 0;
+    enable_servos();
+    
+    while (digital(8) == 0){
+    camera_update();
+        if(get_object_center_y(channelOrange, 0) < 95){
+            followOrange();
+        }
+  if(get_object_center_y(channelOrange, 0)>95){
+            ao();
+            break;
+        }
+    }
+
+}
+
+
+
+int main()
+{
+    colorTrack();    
+    return 0;
+}
+
