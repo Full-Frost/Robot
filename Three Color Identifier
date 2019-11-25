@@ -1,0 +1,31 @@
+#include <kipr/botball.h>
+int channelOrange = 1;
+int channelPink = 2;
+int channelBlue = 3;
+int object = 1;
+
+void colorWave(){
+    camera_open_black();
+    while (1){
+        camera_update();
+        if ((get_object_count(channelOrange)<=0) && (get_object_count(channelPink) <=0) && (get_object_count(channelBlue)<= 0)){
+        printf("nothing here\n");
+        }
+        else{
+        if(get_object_count(channelOrange)>0){
+        printf("Orange Orange Orange");
+        }
+        if (get_object_count(channelPink)>0){
+        printf("Pink Pink Pink");
+        }
+        if (get_object_count(channelBlue)>0){
+        printf("Blue Blue Blue");
+        }
+        }
+    }
+}
+int main()
+{
+    colorWave();
+    return 0;
+}
