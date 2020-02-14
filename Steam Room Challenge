@@ -1,0 +1,238 @@
+#include <kipr/botball.h>
+//hit black line then stop 
+//make turn left shorter
+int lMotor = 1;
+int rMotor = 3;
+int speed = 50;
+int speedFast = 100;
+int rSpeed = -50; 
+int slowSpeed = 5;
+int shorterPause = 300;
+int shortPausethree = 500;
+int shortPause = 1500; 
+int notShortPause = 1600;
+int longPause = 2750;
+int longerPause = 5000;
+int tophat = 2;
+int etFront = 0;
+int topHattwo = 5;
+int servoUn = 0;
+int blackLine = 3200;
+int ccrazyblackLine = 4100;
+int grayLine = 3800;
+int crazygrayLine = 3850;
+int whiteArea = 3500;
+int crazyWhiteArea = 3700;
+int targetval = 3750;
+int actualtargetval = 1500;
+int targetPipe = 2000;
+int graylineFront = 3800;
+int whiteFront = 3400;
+//int pipeOG = 500;
+
+void forward(){
+ motor(lMotor, speed);
+ motor(rMotor, speed);
+ ao();
+}
+
+void forwardTwo(){
+if(analog(topHattwo)<ccrazyblackLine){
+forward();   
+}
+}
+
+void reverse(){
+ motor(lMotor, rSpeed);
+ motor(rMotor, rSpeed);
+    ao();
+}
+
+void leftTurn(){
+ motor(lMotor, rSpeed);
+ motor(rMotor, speed);
+  msleep(shortPause);
+      ao();
+}
+void adjustmentleft(){
+     motor(lMotor, rSpeed); 
+ motor(rMotor, speed);
+ msleep(shortPause);  
+    ao();
+ }
+
+void rightTurn(){
+ motor(lMotor, speed); 
+ motor(rMotor, rSpeed);
+ //msleep(shortPause);  
+    ao();
+}
+ void adjustmentright(){
+     motor(lMotor, speed); 
+ motor(rMotor, rSpeed);
+ msleep(shortPause);  
+    ao();
+ }
+void adjustmentrighttwo(){
+     motor(lMotor, speed); 
+ motor(rMotor, rSpeed);
+ msleep(shortPausethree);  
+    ao();
+ }
+void shortadjustmentright(){
+     motor(lMotor, speed); 
+ motor(rMotor, rSpeed);
+ msleep(shorterPause);  
+    ao();
+ }
+void veerR(){
+    motor(lMotor, speedFast);
+    motor(rMotor, slowSpeed);
+}
+
+void veerL(){
+  motor(lMotor, slowSpeed);
+    motor(rMotor, speedFast); 
+}
+
+void boxMove(){
+    while (analog(topHattwo)< blackLine){
+        forward();
+        if(analog(tophat)>= whiteArea){
+            veerL();
+          }  
+        if (analog(tophat)<= grayLine){
+            veerR();
+        }
+   }
+ao();
+}
+
+void firstDance(){
+    while (analog(topHattwo)<actualtargetval){
+   forward();
+        printf("\n main tophat = %d \n", analog(tophat));
+        printf("\n main tophat = %d \n", analog(topHattwo));
+    }
+    printf("out of loop 1");
+ao();
+}
+void firstDancetwo(){
+    while (analog(tophat)<actualtargetval){
+   forward();
+    }
+    printf("out of loop 1.3");
+ao();
+}
+
+void secondDance(){
+ while (analog(topHattwo)>targetval){
+     forward();
+     printf("\n main tophat = %d \n", analog(tophat));
+     printf("\n main tophat = %d \n", analog(topHattwo));
+ }
+    printf("out of loop 2");
+ao();    
+}
+void lefter(){
+ while (analog(tophat)>whiteFront){
+     leftTurn();
+ }
+    printf("turning left");
+    ao();
+}
+void righter(){
+ while (analog(tophat)>whiteFront){
+     rightTurn();
+ }
+    printf("turning right");
+    ao();
+}
+/*void rightertwo(){
+ while (analog(topHattwo)>targetval){
+     rightTurn();
+ }
+    printf("turning right");
+    ao();
+}*/
+void keepGoing(){
+ while (analog(topHattwo)<targetval){
+     veerL();
+ }
+    ao();
+    printf("final aproach");
+}
+
+void theVeer(){
+    printf("enter VEER\n");
+    printf("frontsens = %d \n", analog(etFront));
+ while (analog(etFront)<targetPipe){   
+    forward();
+     if (analog(tophat)<graylineFront){
+      veerL();   
+      printf("veer left");
+     }
+     if (analog(tophat)>graylineFront){
+      veerR();
+         printf("veer right");
+     }
+ }
+    printf("exiting the follow line ");
+    ao();
+}
+void firstFunction(){
+firstDance();
+    msleep(100);
+secondDance();
+    msleep(100);
+firstDance();
+    msleep(100);
+//secondDance();
+    //msleep(100);
+righter();
+       msleep(100);
+//secondDance();
+   // msleep(100);
+//righter();
+   // msleep(100);
+//boxMove();
+    //msleep(100);
+//righter();
+    //msleep(100);
+//rightertwo();
+   // msleep(100);
+//keepGoing();
+   // msleep(100);
+//rightertwo();
+    //msleep(100);
+firstDancetwo();
+    msleep(100);
+adjustmentrighttwo();
+    msleep(100);
+theVeer();
+    msleep(100); 
+}
+
+void secondFunction(){
+righter();
+    msleep(100);
+     printf("\n main tophat = %d \n", analog(tophat));
+shortadjustmentright();
+    msleep(100);
+//forwardTwo();
+    msleep(100);
+}
+void thirdFunction(){
+   //msleep(100);
+    firstDance();
+    msleep(100);
+}
+int main(){ 
+firstFunction();
+    //msleep(100);
+    printf("\n\t Out of first function \t\n");
+//secondFunction();
+   // printf("\n\t Out of second function \t\n");
+//thirdFunction();
+    return 0;
+}
