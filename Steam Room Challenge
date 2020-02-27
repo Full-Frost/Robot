@@ -1,15 +1,15 @@
 #include <kipr/botball.h>
-//hit black line then stop 
+//hit black line then stop
 //make turn left shorter
 int lMotor = 1;
 int rMotor = 3;
 int speed = 50;
 int speedFast = 100;
-int rSpeed = -50; 
+int rSpeed = -50;
 int slowSpeed = 5;
-int shorterPause = 300;
-int shortPausethree = 500;
-int shortPause = 1500; 
+int shorterPause = 350;
+int shortPausethree = 300;
+int shortPause = 1500;
 int notShortPause = 1600;
 int longPause = 2750;
 int longerPause = 5000;
@@ -23,11 +23,13 @@ int grayLine = 3800;
 int crazygrayLine = 3850;
 int whiteArea = 3500;
 int crazyWhiteArea = 3700;
-int targetval = 3750;
-int actualtargetval = 1500;
-int targetPipe = 2000;
+int targetval = 3800;
+int actualtargetval = 2000;
+int targetPipe = 2600;
 int graylineFront = 3800;
 int whiteFront = 3400;
+int secondwhitefront = 3650;
+int thirdwhitefront = 4050;
 //int pipeOG = 500;
 
 void forward(){
@@ -37,9 +39,10 @@ void forward(){
 }
 
 void forwardTwo(){
-if(analog(topHattwo)<ccrazyblackLine){
-forward();   
-}
+motor(lMotor, speed);
+ motor(rMotor, speed);
+    msleep(shorterPause);
+ ao();
 }
 
 void reverse(){
@@ -55,32 +58,32 @@ void leftTurn(){
       ao();
 }
 void adjustmentleft(){
-     motor(lMotor, rSpeed); 
+     motor(lMotor, rSpeed);
  motor(rMotor, speed);
  msleep(shortPause);  
     ao();
  }
 
 void rightTurn(){
- motor(lMotor, speed); 
+ motor(lMotor, speed);
  motor(rMotor, rSpeed);
  //msleep(shortPause);  
     ao();
 }
  void adjustmentright(){
-     motor(lMotor, speed); 
+     motor(lMotor, speed);
  motor(rMotor, rSpeed);
  msleep(shortPause);  
     ao();
  }
 void adjustmentrighttwo(){
-     motor(lMotor, speed); 
+     motor(lMotor, speed);
  motor(rMotor, rSpeed);
  msleep(shortPausethree);  
     ao();
  }
 void shortadjustmentright(){
-     motor(lMotor, speed); 
+     motor(lMotor, speed);
  motor(rMotor, rSpeed);
  msleep(shorterPause);  
     ao();
@@ -92,7 +95,7 @@ void veerR(){
 
 void veerL(){
   motor(lMotor, slowSpeed);
-    motor(rMotor, speedFast); 
+    motor(rMotor, speedFast);
 }
 
 void boxMove(){
@@ -112,27 +115,40 @@ void firstDance(){
     while (analog(topHattwo)<actualtargetval){
    forward();
         printf("\n main tophat = %d \n", analog(tophat));
-        printf("\n main tophat = %d \n", analog(topHattwo));
+        printf("\n main topHattwo = %d \n", analog(topHattwo));
     }
+     printf("\n main tophat2 = %d \n", analog(tophat));
+        printf("\n main topHattwo = %d \n", analog(topHattwo));
     printf("out of loop 1");
 ao();
 }
 void firstDancetwo(){
-    while (analog(tophat)<actualtargetval){
+    while (analog(tophat)<targetval){
    forward();
+        printf("\n main tophat = %d \n", analog(tophat));
     }
+    printf("\n main tophat = %d \n", analog(tophat));
     printf("out of loop 1.3");
 ao();
 }
 
 void secondDance(){
- while (analog(topHattwo)>targetval){
+ while (analog(topHattwo)>actualtargetval){
      forward();
      printf("\n main tophat = %d \n", analog(tophat));
      printf("\n main tophat = %d \n", analog(topHattwo));
  }
     printf("out of loop 2");
 ao();    
+}
+void secondDancetwo(){
+    while (analog(tophat)<targetval){
+   forward();
+        printf("\n main tophat = %d \n", analog(tophat));
+    }
+    printf("\n main tophat = %d \n", analog(tophat));
+    printf("out of loop 2.3");
+ao();
 }
 void lefter(){
  while (analog(tophat)>whiteFront){
@@ -148,13 +164,27 @@ void righter(){
     printf("turning right");
     ao();
 }
-/*void rightertwo(){
- while (analog(topHattwo)>targetval){
+void rightertwo(){
+ while (analog(tophat)>secondwhitefront){
      rightTurn();
  }
     printf("turning right");
     ao();
-}*/
+}
+void righterthree(){
+ while (analog(topHattwo)<actualtargetval){
+     rightTurn();
+ }
+    printf("turning right");
+    ao();
+}
+void righterfour(){
+ while (analog(topHattwo)>actualtargetval){
+     rightTurn();
+ }
+    printf("turning right");
+    ao();
+}
 void keepGoing(){
  while (analog(topHattwo)<targetval){
      veerL();
@@ -166,10 +196,10 @@ void keepGoing(){
 void theVeer(){
     printf("enter VEER\n");
     printf("frontsens = %d \n", analog(etFront));
- while (analog(etFront)<targetPipe){   
+ while (analog(etFront)<targetPipe){  
     forward();
      if (analog(tophat)<graylineFront){
-      veerL();   
+      veerL();  
       printf("veer left");
      }
      if (analog(tophat)>graylineFront){
@@ -178,6 +208,7 @@ void theVeer(){
      }
  }
     printf("exiting the follow line ");
+    printf("\nfrontsens = %d \n", analog(etFront));
     ao();
 }
 void firstFunction(){
@@ -189,7 +220,7 @@ firstDance();
     msleep(100);
 //secondDance();
     //msleep(100);
-righter();
+rightertwo();
        msleep(100);
 //secondDance();
    // msleep(100);
@@ -210,13 +241,13 @@ firstDancetwo();
 adjustmentrighttwo();
     msleep(100);
 theVeer();
-    msleep(100); 
+    msleep(100);
 }
 
 void secondFunction(){
-righter();
+rightertwo();
     msleep(100);
-     printf("\n main tophat = %d \n", analog(tophat));
+    printf("\n main tophat = %d \n", analog(tophat));
 shortadjustmentright();
     msleep(100);
 //forwardTwo();
@@ -224,15 +255,32 @@ shortadjustmentright();
 }
 void thirdFunction(){
    //msleep(100);
-    firstDance();
+firstDance();
+    msleep(100);
+secondDance();
+    msleep(100);
+firstDancetwo();
+    msleep(100);
+righterthree();
+    msleep(100);
+righterfour();
+    msleep(100);
+//firstDance();
+    msleep(100);
+//secondDancetwo();
+    msleep(100);
+//forwardTwo();
     msleep(100);
 }
-int main(){ 
+
+int main(){
+    //wait_for_light(4);
+    shut_down_in(120.0);
 firstFunction();
     //msleep(100);
     printf("\n\t Out of first function \t\n");
-//secondFunction();
-   // printf("\n\t Out of second function \t\n");
-//thirdFunction();
+secondFunction();
+   printf("\n\t Out of second function \t\n");
+thirdFunction();
     return 0;
 }
