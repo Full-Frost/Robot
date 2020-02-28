@@ -1,0 +1,236 @@
+#include <kipr/botball.h>
+int lMotor = 1;//left motor
+int rMotor = 3;// right motor
+int speed = 50;//speed of bot
+int speedFast = 100;//fast veer speed
+int rSpeed = -50;//speed when reversing
+int slowSpeed = 5;//slow veer speed
+int shorterPause = 350;//pause for turn
+int shortPausethree = 300;//pause for turn 
+int shortPause = 1500;// pause for turn 
+int tophat = 2;//tophat sensor port #
+int etFront = 0; //distance sensor port #
+int topHattwo = 5; //tophat sensor port #
+int targetval = 3800; //value for when to differentiate between white and black when covered 
+int actualtargetval = 2000;//value for tophattwo to differentiate between white and black
+int targetPipe = 2600;//pipe distance (up the number?)
+int graylineFront = 3800;//grayline value for our close in tophat sensor
+int whiteFront = 3400;//white box value for out close in tophat sensor 
+int secondwhitefront = 3650;//white box value for the second function
+int thirdwhitefront = 4050;//white box value for the third function
+
+void forward() {//robot moves forward
+	motor(lMotor, speed);
+	motor(rMotor, speed);
+	ao();
+}
+
+void forwardtime() {//a timed forward 
+	motor(lMotor, speed);
+	motor(rMotor, speed);
+	msleep(shorterPause);
+	ao();
+}
+
+void reverse() {//robot moves backward 
+	motor(lMotor, rSpeed);
+	motor(rMotor, rSpeed);
+	ao();
+}
+
+void leftTurn() {//left turn for the robot 
+	motor(lMotor, rSpeed);
+	motor(rMotor, speed);
+	//msleep(shortPause);
+	ao();
+}
+void adjustmentleft() {//timed lefte turn
+	motor(lMotor, rSpeed);
+	motor(rMotor, speed);
+	msleep(shortPause);
+	ao();
+}
+
+void rightTurn() {//right turn
+	motor(lMotor, speed);
+	motor(rMotor, rSpeed);
+	ao();
+}
+void adjustmentright() {//adjustment right turn time: 1500
+	motor(lMotor, speed);
+	motor(rMotor, rSpeed);
+	msleep(shortPause);
+	ao();
+}
+void adjustmentrighttwo() {//adjustment right turn time: 300
+	motor(lMotor, speed);
+	motor(rMotor, rSpeed);
+	msleep(shortPausethree);
+	ao();
+}
+void shortadjustmentright() {//adjustment right turn time: 350
+	motor(lMotor, speed);
+	motor(rMotor, rSpeed);
+	msleep(shorterPause);
+	ao();
+}
+void veerR() {//veer to the right 
+	motor(lMotor, speedFast);
+	motor(rMotor, slowSpeed);
+}
+
+void veerL() {//veer to the left
+	motor(lMotor, slowSpeed);
+	motor(rMotor, speedFast);
+}
+
+void findBlack() {//find the black line 
+	while (analog(topHattwo) < actualtargetval) {
+		forward();
+		printf("\n main tophat = %d \n", analog(tophat));
+		printf("\n main topHattwo = %d \n", analog(topHattwo));
+	}
+	printf("\n main tophat2 = %d \n", analog(tophat));
+	printf("\n main topHattwo = %d \n", analog(topHattwo));
+	printf("out of loop 1");
+	ao();
+}
+void findBlacktophat() {//find the black line using the close in tophat sensor 
+	while (analog(tophat) < targetval) {
+		forward();
+		printf("\n main tophat = %d \n", analog(tophat));
+	}
+	printf("\n main tophat = %d \n", analog(tophat));
+	printf("out of loop 1.3");
+	ao();
+}
+
+void findWhite() {//find the white line
+	while (analog(topHattwo) > actualtargetval) {
+		forward();
+		printf("\n main tophat = %d \n", analog(tophat));
+		printf("\n main tophat = %d \n", analog(topHattwo));
+	}
+	printf("out of loop 2");
+	ao();
+}
+void findWhitetophat() {//find the white line using the close in tophat sensor  
+	while (analog(tophat) < targetval) {
+		forward();
+		printf("\n main tophat = %d \n", analog(tophat));
+	}
+	printf("\n main tophat = %d \n", analog(tophat));
+	printf("out of loop 2.3");
+	ao();
+}
+void sensorLeft() {//turn left using sensors while on black line 
+	while (analog(tophat) > whiteFront) {
+		leftTurn();
+	}
+	printf("turning left");
+	ao();
+}
+void sensorRight() {//turn right using sensors while on the black line 
+	while (analog(tophat) > whiteFront) {
+		rightTurn();
+	}
+	printf("turning right");
+	ao();
+}
+void sensorRightSecond() {//turn right using sensors while on the black
+	while (analog(tophat) > secondwhitefront) {
+		rightTurn();
+	}
+	printf("turning right");
+	ao();
+}
+void sensorRightthird() {//turn right using sensors while on the white 
+	while (analog(topHattwo) < actualtargetval) {
+		rightTurn();
+	}
+	printf("turning right");
+	ao();
+}
+void sensorRightfourth() {
+	while (analog(topHattwo) > actualtargetval) {//turn right using sensors while on black
+		rightTurn();
+	}
+	printf("turning right");
+	ao();
+}
+
+void followLine() {//using a combination of veers to follow the gray line 
+	printf("enter VEER\n");
+	printf("frontsens = %d \n", analog(etFront));
+	while (analog(etFront) < targetPipe) {
+		forward();
+		if (analog(tophat) < graylineFront) {
+			veerL();
+			printf("veer left");
+		}
+		if (analog(tophat) > graylineFront) {
+			veerR();
+			printf("veer right");
+		}
+	}
+	printf("exiting the follow line ");
+	printf("\nfrontsens = %d \n", analog(etFront));
+	ao();
+}
+void firstFunction() {//first function to get me to the pipe 
+	findBlack();//find first function
+	msleep(100);
+	findWhite();//find the white afte the first black line 
+	msleep(100);
+	findBlack();//find the next black line 
+	msleep(100);
+	sensorRightSecond();//turn right to the white
+	msleep(100);
+	findBlacktophat();//find the black line again 
+	msleep(100);
+	adjustmentrighttwo();//short adjustment right turn
+	msleep(100);
+	followLine();//follow the line to the pipe 
+	msleep(100);
+	printf("\n\t Out of first function \t\n");
+}
+
+void secondFunction() {//making the turn afte the pipe 
+	sensorRightSecond();//make turn of of black to white 
+	msleep(100);
+	printf("\n main tophat = %d \n", analog(tophat));
+	shortadjustmentright();//quick adjustment right turn
+	msleep(100);
+	forwardtime();//a timed forward to get me moving 
+	msleep(100);
+	printf("\n\t Out of second function \t\n");
+}
+void thirdFunction() {
+	findBlack();// find the black line at the bottom
+	msleep(100);
+	findWhite();//keep going to the white in the box
+	msleep(100);
+	findBlacktophat();//keep going until the black line is up to the middle tophat sensor 
+	msleep(100);
+	sensorRightthird();//make a right turn so that the outside sensor is on the black line 
+	msleep(100);
+	sensorRightfourth();//keep turning until the outside sensor is on the white area 
+	msleep(100);
+	//findBlack();//manuever to the starting box's black line 
+	msleep(100);
+	//findWhitetophat();//keep going until the middle tophat is on the white 
+	msleep(100);
+	//forwardtime();// a timed forward to make sure that the cubes are in
+	msleep(100);
+}
+void mainFunction() {//combination of all of the functions
+	firstFunction();
+	secondFunction();
+	thirdFunction();
+}
+int main() {
+	//wait_for_light(4);
+	shut_down_in(120.0);
+	mainFunction();
+	return 0;
+}
