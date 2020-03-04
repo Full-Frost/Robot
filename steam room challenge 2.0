@@ -229,7 +229,7 @@ void mainFunction() {//combination of all of the functions
 	thirdFunction();
 }
 int main() {
-	//wait_for_light(4);
+	wait_for_light(4);
 	shut_down_in(120.0);
 	mainFunction();
 	return 0;
