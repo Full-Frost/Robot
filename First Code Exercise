@@ -1,0 +1,37 @@
+// Created on Thu March 19 2020
+int r_motor = 2;//right motor port number
+int l_motor = 0;// left motor port number 
+int speed = 50;//speed value 
+int speeder = 75;//faster speed value 
+int sensLeft = 8;//left sensor port number 
+int sensRight = 9;//right sensor port number 
+int stop = 0;//speed value of 0
+int sleep = 100;//msleep value to seperate between functions
+int sleepDos = 900;//msleep value for turn
+
+void forward(){  // forward function tells the wallaby what the power required in each motor is, as well as to move forward
+motor(l_motor,speed);
+motor(r_motor,speed);
+}
+void turnR(){  // the turnR function turns the robot to the right 
+    motor(l_motor,speed);//left motor moves
+    motor(r_motor,stop);//right motor stops moving
+    msleep(sleepDos);//perform the operation for this amount of time 
+    ao();
+}
+int main()
+{
+	while(digital(sensRight)== 0){//while the right bumper is not depressed mover forward 
+		forward();
+		msleep(sleep);
+		if(digital(sensRight)== 1){//if right bumper is triggered turn right
+			turnR();
+			msleep(sleep);
+			if (digital(sensLeft)== 1){//if the left bumper is triggered shut down
+				msleep(sleep);
+				ao();
+			}
+		}
+	}
+	return 0;
+}
