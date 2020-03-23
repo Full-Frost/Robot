@@ -1,0 +1,36 @@
+// Created on Mon March 23 2020
+int l_motor = 0;// left motor port
+int r_motor = 2;//right motor port
+int speed = 50;//speed for the robot to travel at
+int stop = 0; //motor runs at 0 speed
+int pause_one = 1500; //msleep for the last turn
+int pause_two = 750; //msleep for the adjustment turn
+int l_bump = 8; //bump sensor port #
+int r_bump = 9; //bump sensor port #
+int r_speed = -50; //reverse speed 
+
+void forward(){//robot moves forward
+	motor(l_motor, speed);
+	motor(r_motor, speed);
+}
+void adjustmentRight(){//adjustment right
+	motor(l_motor, speed);
+	motor(r_motor, stop);
+	msleep(pause_two);//msleep for the turn
+	ao();
+}
+void final_turn(){// final turn
+	motor(l_motor, r_speed);//reverse on one of the wheels 
+	motor(r_motor, stop);
+	msleep(pause_one);//msleep for turn
+	ao();
+}
+int main()
+{
+	adjustmentRight();//run this first 
+	while(digital(r_bump) == 0){//while loop to get to wall
+		forward();
+	}
+	final_turn();//once at the wall make the turn
+	return 0;
+}
