@@ -52,7 +52,7 @@ int main()
 	while (analog(tophat_right) <= black_line){//get to the black line 
 		forward();
 	}
-	while (digital(r_bump) == 0){//as long as the robot is not on the wall
+	while (analog(middleRange) >= wall){//as long as the robot is not on the wall
 		if(analog(tophat_left) <=black_line){//veer to the right if sensor is not on the black line. 
 			miniturnR();
 		}
