@@ -1,0 +1,95 @@
+// Created on Mon March 30 2020
+int l_motor = 0;// left motor port
+int r_motor = 2;//right motor port
+int speed = 50;//speed for the robot to travel at
+int lowSpeed = 20;
+int highSpeed = 90;
+int stop = 0; //motor runs at 0 speed
+int pause_one = 1500; //msleep for the last turn
+int pause_two = 800; //msleep for the adjustment turn
+int pause_three = 300; //msleep for the adjustment turn
+int l_bump = 8; //bump sensor port #
+int r_bump = 9; //bump sensor port #
+int r_speed = -50; //reverse speed 
+int tophat_left = 5;//tophat sensor port #
+int tophat_right = 6;//tophat sensor port #
+int black_line = 750;//value for the black line
+int middleRange = 1; //range sensor port number 
+int wall = 100;
+
+void forward(){//robot moves forward
+	motor(l_motor, speed);
+	motor(r_motor, speed);
+}
+void forward_two(){//robot moves forward
+	motor(l_motor, speed);
+	motor(r_motor, speed);
+	msleep(pause_three);
+}
+void reverse(){
+	motor(l_motor, r_speed);
+	motor(r_motor, r_speed);
+	msleep(pause_one);
+}
+void adjustmentRight(){//adjustment right
+	motor(l_motor, speed);
+	motor(r_motor, stop);
+	msleep(pause_two);//msleep for the turn
+	ao();
+}
+void final_turn(){// final turn
+	motor(l_motor, r_speed);//reverse on one of the wheels 
+	motor(r_motor, stop);
+	msleep(pause_one);//msleep for turn
+	ao();
+}
+void miniturnL(){//miniturn to follow the black line
+	motor(l_motor, lowSpeed);
+	motor(r_motor, highSpeed);
+	ao();
+}
+void miniturnR(){//miniturn to follow the black line 
+	motor(l_motor, highSpeed);
+	motor(r_motor, lowSpeed);
+	ao();
+}
+void turnToBlack(){
+	motor (l_motor, r_speed);
+	motor (r_motor, stop);
+	msleep(pause_two);
+	ao();
+}
+int main()
+{
+	adjustmentRight();//run this first 
+	while(digital(r_bump) == 0){//while loop to get to wall
+		forward();
+	}
+	final_turn();//once at the wall make the turn
+	while (analog(tophat_right) <= black_line){//get to the black line 
+		forward();
+	}
+	while (analog(middleRange) >= wall){//as long as the robot is not on the wall
+		if(analog(tophat_left) <=black_line){//veer to the right if sensor is not on the black line. 
+			miniturnR();
+		}
+		if(analog(tophat_left) >=black_line){//veer to the left if sensor is not on the black line. 
+			miniturnL();
+		}
+	}
+	reverse();
+	turnToBlack();
+	forward_two();
+	while (analog(tophat_left) <= black_line){
+		forward();
+	}
+	while (analog(tophat_right) <= black_line){
+		if(analog(tophat_left) <=black_line){//veer to the right if sensor is not on the black line. 
+			miniturnR();
+		}
+		if(analog(tophat_left) >=black_line){//veer to the left if sensor is not on the black line. 
+			miniturnL();
+		}
+	}
+	return 0;
+}
