@@ -1,0 +1,110 @@
+// Created on Thu April 2 2020
+int wall = 200;
+int wall_m = 150;
+int range = 2;
+int range_m = 1;
+int l_motor = 0;
+int r_motor = 2;
+int stop = 0;
+int speed = 50;
+int l_speed = 30;
+int f_speed = 90;
+int count = 0;
+int r_tophat = 6;
+int blackline = 20;
+int l_pause = 200;
+int pause = 1100;
+int pause_two = 1700;
+int pause_three = 1800;
+
+void forward(){
+	motor(l_motor, speed);
+	motor(r_motor, speed);
+}
+void forward_time(){
+	motor(l_motor, speed);
+	motor(r_motor, speed);
+	msleep(l_pause);
+}
+void miniturnL(){
+	motor(l_motor, l_speed);
+	motor(r_motor, f_speed);
+	
+}
+void miniturnR(){
+	motor(l_motor, f_speed);
+	motor(r_motor, l_speed);
+	
+}
+void adjustmentRight(){//adjustment right
+	motor(l_motor, speed);
+	motor(r_motor, stop);
+	msleep(pause);//msleep for the turn
+	ao();
+}
+void adjustmentLeft(){//adjustment right
+	motor(l_motor, stop);
+	motor(r_motor, speed);
+	msleep(pause_two);//msleep for the turn
+	ao();
+}
+void adjustmentLefttwo(){//adjustment right
+	motor(l_motor, stop);
+	motor(r_motor, speed);
+	msleep(pause_three);//msleep for the turn
+	ao();
+}
+
+int main()
+{
+	adjustmentRight();
+		while (analog(range_m) >= wall_m){ 
+		if(analog(range) <= wall){
+			miniturnL();
+		}
+		if (analog(range) >= wall){
+			miniturnR();
+		}
+	}
+	adjustmentLeft();
+	while (analog(range_m) >= wall_m){ 
+		if(analog(range) <= wall){
+			miniturnL();
+		}
+		if (analog(range) >= wall){
+			miniturnR();
+		}
+	}
+	adjustmentLefttwo();
+	forward_time();
+	while (analog(range_m) >= wall_m){ 
+		if(analog(range) <= wall){
+			miniturnL();
+		}
+		if (analog(range) >= wall){
+			miniturnR();
+		}
+	}
+	adjustmentLefttwo();
+	forward_time();
+	while (analog(range_m) >= wall_m){ 
+		if(analog(range) <= wall){
+			miniturnL();
+		}
+		if (analog(range) >= wall){
+			miniturnR();
+		}
+	}
+	adjustmentLefttwo();
+	forward_time();
+	while (analog(range_m) >= wall_m){ 
+		if(analog(range) <= wall){
+			miniturnL();
+		}
+		if (analog(range) >= wall){
+			miniturnR();
+		}
+	}
+	
+	return 0;
+}
