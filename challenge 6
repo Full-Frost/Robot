@@ -1,0 +1,31 @@
+// Created on Mon April 6 2020
+
+int l_motor = 0;
+int r_motor = 2;
+int speed = 50;
+int r_speed = -50;
+int pause = 1000;
+int miniPause = 300; 
+
+void forward(){
+	motor(l_motor, speed);
+	motor(r_motor, speed);
+	msleep(pause);
+}
+void reverse(){
+	motor(l_motor, r_speed);
+	motor(r_motor, r_speed);
+	msleep(pause);
+}
+
+int main()
+{
+	
+	for(int hello = 0; hello <= 6; hello++){
+		forward();
+		reverse();
+		printf ("%d", hello);
+		msleep(miniPause);
+	}
+	return 0;
+}
